@@ -17,7 +17,8 @@ void USaturnAIWeaponComponent::StartFire()
     }
     else
     {
-        CurrentWeapon->StartFire();
+        UE_LOG(LogTemp, Warning, TEXT("StartFireXXXXXXXXXXXXXX"));
+	    CurrentWeapon->StartFire();		//发射
     }
 }
 

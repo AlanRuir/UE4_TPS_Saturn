@@ -17,14 +17,12 @@ void ASaturnRifleWeapon::BeginPlay()
 
 void ASaturnRifleWeapon::StartFire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Fire!"));
 	MakeShot();
 	GetWorld()->GetTimerManager().SetTimer(ShotTimerHandle, this, &ASaturnRifleWeapon::MakeShot, TimeBetweenShots, true);
 }
 
 void ASaturnRifleWeapon::StopFire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Stop!"));
 	GetWorld()->GetTimerManager().ClearTimer(ShotTimerHandle);
 }
 
@@ -43,7 +41,7 @@ void ASaturnRifleWeapon::MakeShot()
 		return;
 	}
 
-	const auto Controller = Player->GetController<APlayerController>();		//获取控制器
+	const auto Controller = Player->GetController<AController>();		//获取控制器
 	if (!Controller)
 	{
 		StopFire();

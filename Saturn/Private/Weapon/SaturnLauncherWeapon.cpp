@@ -6,24 +6,28 @@
 void ASaturnLauncherWeapon::StartFire()
 {
     MakeShot();
+	UE_LOG(LogTemp, Warning, TEXT("MakeShot"));
 }
 
 void ASaturnLauncherWeapon::MakeShot()
 {
     if (!GetWorld() || IsAmmoEmpty())
 	{
+		UE_LOG(LogTemp, Warning, TEXT("IsAmmoEmpty"));
 		return;
 	}
 
 	const auto Player = Cast<ACharacter>(GetOwner());		//获取拥有者，即为玩家
 	if (!Player)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Player is null"));
 		return;
 	}
 
-	const auto Controller = Player->GetController<APlayerController>();		//获取控制器
+	const auto Controller = Player->GetController<AController>();		//获取控制器
 	if (!Controller)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Controller is null"));
 		return;
 	}
 

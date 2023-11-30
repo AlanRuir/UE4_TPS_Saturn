@@ -41,7 +41,7 @@ void AAWeaponBase::MakeDamage(const FHitResult& HitResult)
 		return;
 	}
 
-	const auto Controller = Player->GetController<APlayerController>();		//获取控制器
+	const auto Controller = Player->GetController<AController>();		//获取控制器
 	if (!Controller)
 	{
 		return;

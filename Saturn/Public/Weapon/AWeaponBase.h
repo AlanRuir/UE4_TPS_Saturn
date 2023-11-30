@@ -57,8 +57,8 @@ protected:
 	FName MuzzleSocketName = "MuzzleSocket";		//枪口
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
 	float TraceMaxDistance = 1500.0f;				//发射距离
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon")
-	float DamageAmount = 10.0f;						//伤害值
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	float DamageAmount = 3.0f;						//伤害值
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
 	FAmmoData DefaultAmmo{15, 5, false};			//弹匣信息
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="UI")
