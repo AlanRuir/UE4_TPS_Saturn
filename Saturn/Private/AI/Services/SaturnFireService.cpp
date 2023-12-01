@@ -24,7 +24,6 @@ void USaturnFireService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* Node
         const auto Controller = OwnerComp.GetAIOwner();
         const auto AIWeaponComponent = Cast<USaturnAIWeaponComponent>(Controller->GetPawn()->GetComponentByClass(USaturnAIWeaponComponent::StaticClass()));
         AActor* Enemy = Cast<AActor>(Blackboard->GetValueAsObject(EnemyActorKey.SelectedKeyName));       //从黑板中获取敌人的Actor
-        AActor* Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
         if (Enemy && AIWeaponComponent)
         {
