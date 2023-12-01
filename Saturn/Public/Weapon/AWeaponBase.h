@@ -9,6 +9,8 @@
 #include "DrawDebugHelpers.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/Controller.h"
+#include "Components/AudioComponent.h"	//声音组件头文件
+#include "Sound/SoundCue.h"				//声音资源头文件
 #include "AWeaponBase.generated.h"
 
 USTRUCT(BlueprintType)
@@ -49,6 +51,7 @@ public:
 	FAmmoData GetAmmoData() const;					//获取子弹信息
 	bool TryToAddAmmo(int32 ClipsAmount);				//尝试添加子弹
 	bool IsAmmoEmpty() const;		//弹匣是否为空
+	void PlayFireSound();			//播放发射声音
 protected:
 	virtual void BeginPlay() override;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
@@ -57,6 +60,10 @@ protected:
 	FName MuzzleSocketName = "MuzzleSocket";		//枪口
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
 	float TraceMaxDistance = 1500.0f;				//发射距离
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
+	USoundCue* FireSound;							//发射声音
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
+	UAudioComponent* FireSoundComponent;				//发射声音组件
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
 	float DamageAmount = 3.0f;						//伤害值
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")

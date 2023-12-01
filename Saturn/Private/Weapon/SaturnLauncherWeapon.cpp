@@ -27,6 +27,7 @@ void ASaturnLauncherWeapon::MakeShot()
 		return;
 	}
 
+	PlayFireSound();
 	FVector ViewLocation;		//视角位置
 	FRotator ViewRotation;		//视角方向
 	Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);		//获取视角位置和方向

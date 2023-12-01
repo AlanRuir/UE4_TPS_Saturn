@@ -9,6 +9,9 @@ AAWeaponBase::AAWeaponBase()
 
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>("WeaponMesh");
 	SetRootComponent(WeaponMesh);				//设置WeaponMesh为根组件
+	FireSoundComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComp"));
+	FireSoundComponent->bAutoActivate = false;
+	FireSound = CreateDefaultSubobject<USoundCue>(TEXT("FireSound"));
 }
 
 void AAWeaponBase::BeginPlay()
@@ -16,6 +19,10 @@ void AAWeaponBase::BeginPlay()
 	Super::BeginPlay();
 	check(WeaponMesh);
 	CurrentAmmo = DefaultAmmo;		//初始化弹匣为默认弹匣
+	if (FireSound)
+	{
+		FireSoundComponent->SetSound(FireSound);
+	}
 }
 
 void AAWeaponBase::StartFire()
@@ -147,5 +154,13 @@ bool AAWeaponBase::TryToAddAmmo(int32 ClipsAmount)
 	}
 
 	return true;
+}
+
+void AAWeaponBase::PlayFireSound()
+{
+	if (FireSoundComponent && FireSound)
+	{
+		FireSoundComponent->Play();
+	}
 }
 
