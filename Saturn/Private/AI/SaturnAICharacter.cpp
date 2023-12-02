@@ -5,6 +5,7 @@
 #include "AI/SaturnAIController.h"
 #include "GameFramework/CharacterMovementComponent.h"       //移动组件头文件
 #include "Components/SaturnAIWeaponComponent.h"             //AI武器组件头文件
+#include "BrainComponent.h"                                //行为树组件头文件
 
 ASaturnAICharacter::ASaturnAICharacter(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer.SetDefaultSubobjectClass<USaturnAIWeaponComponent>(TEXT("WeaponComponent")))
@@ -17,5 +18,16 @@ ASaturnAICharacter::ASaturnAICharacter(const FObjectInitializer& ObjectInitializ
     {
         GetCharacterMovement()->bOrientRotationToMovement = true;               //面向移动方向
         GetCharacterMovement()->RotationRate = FRotator(0.0f, 200.0f, 0.0f);    //旋转速率
+    }
+}
+
+void ASaturnAICharacter::OnDeath()
+{
+    Super::OnDeath();
+
+    const auto SaturnAIController = Cast<AAIController>(Controller);
+    if (SaturnAIController && SaturnAIController->BrainComponent)
+    {
+        SaturnAIController->BrainComponent->Cleanup();          //清理行为树
     }
 }

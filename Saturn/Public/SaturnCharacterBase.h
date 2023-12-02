@@ -27,6 +27,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void OnDeath();                        //死亡
 
 public:	
 	// Called every frame
@@ -63,7 +64,7 @@ private:
 	void TurnAround(float Value);           //左右旋转
 	void OnStartRunning();                 //开始跑步
     void OnStopRunning();                   //停止跑步
-	void OnDeath();                        //死亡
+	// void OnDeath();                        //死亡
 	void OnHealthChanged(float Health);        //伤害
 private:
 	bool WantsToRun = false;                //是否开始跑步

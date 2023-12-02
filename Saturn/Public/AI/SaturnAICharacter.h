@@ -17,4 +17,7 @@ public:
 	ASaturnAICharacter(const FObjectInitializer& ObjectInitializer);
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="AI")
 	UBehaviorTree* BehaviorTreeAsset;		//行为树
+
+protected:
+	virtual void OnDeath() override;                        //死亡
 };
