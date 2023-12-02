@@ -36,6 +36,8 @@ void USaturnFireService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* Node
                 AIWeaponComponent->StartFire();
             }
         }
+
+        AIWeaponComponent->StopFire();
     }
 
     Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);

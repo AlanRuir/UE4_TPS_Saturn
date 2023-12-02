@@ -117,6 +117,7 @@ void USaturnWeaponComponent::NextWeapon()
 		return;
 	}
 
+	CurrentWeapon->StopFire();		//停止发射
 	CurrentWeaponIndex = (CurrentWeaponIndex + 1) % Weapons.Num();
 	EquipWeapon(CurrentWeaponIndex);
 }
