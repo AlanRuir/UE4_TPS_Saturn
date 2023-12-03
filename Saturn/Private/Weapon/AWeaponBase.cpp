@@ -70,16 +70,16 @@ void AAWeaponBase::DecreaseAmmo()
 
 	if (IsClipEmpty() && !IsAmmoEmpty())
 	{
-		ChangeClip();
+		OnClipEmpty.Broadcast();
 	}
 }
 
-bool AAWeaponBase::IsAmmoEmpty() const
+bool AAWeaponBase::IsAmmoEmpty()
 {
 	return !CurrentAmmo.Infinite && CurrentAmmo.Clips == 0 && IsClipEmpty();
 }
 
-bool AAWeaponBase::IsClipEmpty() const
+bool AAWeaponBase::IsClipEmpty()
 {
 	return CurrentAmmo.Bullets == 0;
 }
@@ -112,7 +112,7 @@ FAmmoData AAWeaponBase::GetAmmoData() const
 	return CurrentAmmo;
 }
 
-bool AAWeaponBase::IsAmmoFull() const
+bool AAWeaponBase::IsAmmoFull()
 {
 	return CurrentAmmo.Clips == DefaultAmmo.Clips && CurrentAmmo.Bullets == DefaultAmmo.Bullets;
 }
@@ -162,5 +162,10 @@ void AAWeaponBase::PlayFireSound()
 	{
 		FireSoundComponent->Play();
 	}
+}
+
+bool AAWeaponBase::IsClipEnd()
+{
+	return CurrentAmmo.Clips == 0;
 }
 

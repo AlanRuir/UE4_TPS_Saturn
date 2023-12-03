@@ -21,6 +21,11 @@ void USaturnWeaponComponent::BeginPlay()
 	InitAnimation();		//初始化切枪动画
 	SpawnWeapons();			//生成所有武器	
 	EquipWeapon(CurrentWeaponIndex);
+
+	for (auto Weapon : Weapons)
+	{
+		Weapon->OnClipEmpty.AddUObject(this, &USaturnWeaponComponent::Reload);
+	}
 }
 
 void USaturnWeaponComponent::SpawnWeapons()
@@ -193,7 +198,7 @@ bool USaturnWeaponComponent::CanFire() const
 
 bool USaturnWeaponComponent::CanReload() const
 {
-	return CurrentWeapon && !EquipAnimationInProgress && !ReloadAnimationInProgress;		//判断是否可以换弹
+	return CurrentWeapon && !EquipAnimationInProgress && !ReloadAnimationInProgress && !CurrentWeapon->IsAmmoFull() && !CurrentWeapon->IsClipEnd();		//判断是否可以换弹
 }
 
 void USaturnWeaponComponent::Reload()
@@ -203,8 +208,14 @@ void USaturnWeaponComponent::Reload()
 		return;
 	}
 
+	CurrentWeapon->StopFire();		//停止发射
 	ReloadAnimationInProgress = true;		//设置换弹动画进行中
 	PlayAnimMontage(CurrentReloadAnim);		//播放换弹动画
+
+	if (!CurrentWeapon->IsAmmoEmpty())
+	{
+		CurrentWeapon->ChangeClip();
+	}
 }
 
 bool USaturnWeaponComponent::GetWeaponUIData(FWeaponUIData& UIData) const

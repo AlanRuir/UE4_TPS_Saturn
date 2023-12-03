@@ -13,6 +13,8 @@
 #include "Sound/SoundCue.h"				//声音资源头文件
 #include "AWeaponBase.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnClipEmpty);		//弹夹是否为空委托
+
 USTRUCT(BlueprintType)
 struct FAmmoData
 {
@@ -50,8 +52,13 @@ public:
 	FWeaponUIData GetUIData() const;					//获取武器UI信息
 	FAmmoData GetAmmoData() const;					//获取子弹信息
 	bool TryToAddAmmo(int32 ClipsAmount);				//尝试添加子弹
-	bool IsAmmoEmpty() const;		//弹匣是否为空
+	bool IsAmmoEmpty();		//全弹匣是否为空
 	void PlayFireSound();			//播放发射声音
+	void ChangeClip();				//切换弹夹
+	bool IsAmmoFull();		//全弹匣是否满
+	bool IsClipEmpty();		//当前弹匣是否为空
+	bool IsClipEnd();		//备用弹匣是否为空
+	FOnClipEmpty OnClipEmpty;		//弹夹是否为空委托
 protected:
 	virtual void BeginPlay() override;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
@@ -75,10 +82,10 @@ protected:
 	void MakeDamage(const FHitResult& HitResult);
 	void DecreaseAmmo();			//减少子弹
 	// bool IsAmmoEmpty() const;		//弹匣是否为空
-	bool IsClipEmpty()const;		//弹夹是否为空
-	void ChangeClip();				//切换弹夹
+	// bool IsClipEmpty()const;		//弹夹是否为空
+	// void ChangeClip();				//切换弹夹
 	void LogAmmo();					//打印弹匣信息
-	bool IsAmmoFull() const;		//弹匣是否满
+	// bool IsAmmoFull() const;		//弹匣是否满
 private:
 	FAmmoData CurrentAmmo;			//当前弹匣
 };
