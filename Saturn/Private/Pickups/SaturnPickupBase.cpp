@@ -33,6 +33,11 @@ void ASaturnPickupBase::NotifyActorBeginOverlap(AActor* OtherActor)
 	Super::NotifyActorBeginOverlap(OtherActor);
 
 	const auto Pawn = Cast<APawn>(OtherActor);
+	if (!Pawn)
+    {
+        return;
+    }
+
 	if (GivePickupTo(Pawn))
 	{
 		PickupWasTaken();		//拾取
