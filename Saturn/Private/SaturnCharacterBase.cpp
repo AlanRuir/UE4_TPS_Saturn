@@ -2,6 +2,7 @@
 
 
 #include "SaturnCharacterBase.h"
+#include "UI/SaturnGameHUD.h"       //添加用户界面的头文件
 
 // Sets default values
 ASaturnCharacterBase::ASaturnCharacterBase(const FObjectInitializer& ObjInit)
@@ -64,6 +65,7 @@ void ASaturnCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInpu
     PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent, &USaturnWeaponComponent::StopFire);          //绑定停止发射武器回调
     PlayerInputComponent->BindAction("NextWeapon", IE_Pressed, WeaponComponent, &USaturnWeaponComponent::NextWeapon);   //绑定切换武器回调
     PlayerInputComponent->BindAction("Reload", IE_Pressed, WeaponComponent, &USaturnWeaponComponent::Reload);   //绑定切换武器回调
+    PlayerInputComponent->BindAction("ShowGameCtrlHUD", IE_Released, this, &ASaturnCharacterBase::ShowGameCtrlHUD);   //绑定切换武器回调
 }
 
 void ASaturnCharacterBase::MoveForward(float Value)
@@ -154,4 +156,13 @@ void ASaturnCharacterBase::OnGroundLanded(const FHitResult& Hit)
     const auto FinalDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);      //计算最终伤害，着地速度和着地伤害成正比
     UE_LOG(LogTemp, Warning, TEXT("FinalDamage: %f"), FinalDamage); //输出最终伤害
     TakeDamage(FinalDamage, FDamageEvent{}, nullptr, nullptr);  //扣血
+}
+
+void ASaturnCharacterBase::ShowGameCtrlHUD()
+{
+    ASaturnGameHUD* GameHUD = Cast<ASaturnGameHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+    if (GameHUD)
+    {
+        GameHUD->ShowGameCtrlHUD();
+    }
 }

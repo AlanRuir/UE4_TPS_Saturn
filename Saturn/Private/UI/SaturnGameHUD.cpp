@@ -18,6 +18,7 @@ void ASaturnGameHUD::BeginPlay()
     Super::BeginPlay();
 
     PlayerHUDWidgetClass = GetClass()->GetDefaultObject<ASaturnGameHUD>()->PlayerHUDWidgetClass;
+    GameCtrlHUDWidgetClass = GetClass()->GetDefaultObject<ASaturnGameHUD>()->GameCtrlHUDWidgetClass;
 
     if (!PlayerHUDWidgetClass)
     {
@@ -25,11 +26,33 @@ void ASaturnGameHUD::BeginPlay()
         return;
     }
 
-    auto PlayerHUDWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDWidgetClass);
-
-    if (PlayerHUDWidget)
+    if (!GameCtrlHUDWidgetClass)
     {
-        PlayerHUDWidget->AddToViewport();
+        UE_LOG(LogTemp, Warning, TEXT("GameCtrlHUDWidgetClass is nullptr"));
+        return;
+    }
+
+    GameCtrlHUDWidget = CreateWidget<UUserWidget>(GetWorld(), GameCtrlHUDWidgetClass);
+    PlayerHUDWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDWidgetClass);
+
+    if (GameCtrlHUDWidget && PlayerHUDWidget)
+    {
+        GameCtrlHUDWidget->AddToViewport();     //添加到屏幕
+        GameCtrlHUDWidget->SetVisibility(ESlateVisibility::Visible);        //显示界面
+        PlayerHUDWidget->AddToViewport();       //添加到屏幕
+        PlayerHUDWidget->SetVisibility(ESlateVisibility::Hidden);        //隐藏界面
+
+        // 设置输入模式为UI模式，并显示鼠标
+        APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+        if (PlayerController)
+        {
+            FInputModeUIOnly InputMode;     //UI模式
+            InputMode.SetWidgetToFocus(GameCtrlHUDWidget->TakeWidget());        //设置焦点
+            InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);        //不锁定鼠标
+
+            PlayerController->SetInputMode(InputMode);      //设置输入模式
+            PlayerController->bShowMouseCursor = true;      //显示鼠标
+        }
     }
 }
 
@@ -41,4 +64,46 @@ void ASaturnGameHUD::DrawCrossHair()
     const FLinearColor LineColor = FLinearColor::Green;                                 //线的颜色
     DrawLine(Center.Min - HalfLineSize, Center.Max, Center.Min + HalfLineSize, Center.Max, LineColor, LineThickness); //绘制十字线
     DrawLine(Center.Min, Center.Max - HalfLineSize, Center.Min, Center.Max + HalfLineSize, LineColor, LineThickness);
+}
+
+void ASaturnGameHUD::ShowGameCtrlHUD()
+{
+    if (PlayerHUDWidget)
+    {
+        PlayerHUDWidget->SetVisibility(ESlateVisibility::Hidden);
+    }
+
+    if (GameCtrlHUDWidget)
+    {
+        GameCtrlHUDWidget->SetVisibility(ESlateVisibility::Visible);
+
+        // 设置输入模式为UI模式，并显示鼠标
+        APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+        if (PlayerController)
+        {
+            FInputModeUIOnly InputMode;     //UI模式
+            InputMode.SetWidgetToFocus(GameCtrlHUDWidget->TakeWidget());        //设置焦点
+            InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);        //不锁定鼠标
+
+            PlayerController->SetInputMode(InputMode);      //设置输入模式
+            PlayerController->bShowMouseCursor = true;      //显示鼠标
+        }
+    }
+}
+
+void ASaturnGameHUD::ShowPlayerHUD()
+{
+    if (PlayerHUDWidget)
+    {
+        PlayerHUDWidget->SetVisibility(ESlateVisibility::Visible);
+    }
+    if (GameCtrlHUDWidget)
+    {
+        GameCtrlHUDWidget->SetVisibility(ESlateVisibility::Hidden);
+    }
+}
+
+void ASaturnGameHUD::StartGame()
+{
+    UE_LOG(LogTemp, Warning, TEXT("StartGame"));
 }

@@ -66,6 +66,7 @@ private:
     void OnStopRunning();                   //停止跑步
 	// void OnDeath();                        //死亡
 	void OnHealthChanged(float Health);        //伤害
+	void ShowGameCtrlHUD();                //显示游戏控制界面
 private:
 	bool WantsToRun = false;                //是否开始跑步
     bool IsMovingForward = false;           //是否前进
