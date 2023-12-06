@@ -19,6 +19,8 @@ public:
 	void ShowGameCtrlHUD();				//显示游戏控制界面
 	void ShowPlayerHUD();				//显示玩家HUD
 	void StartGame();					//开始游戏
+	FString GetGameCtrlLevelName() const;
+	FString GetPlayerLevelName() const;
 private:
 	void DrawCrossHair();					//绘制十字线(准心)
 
@@ -31,6 +33,10 @@ protected:
     UUserWidget* GameCtrlHUDWidget;		//游戏控制界面
     UPROPERTY()
     UUserWidget* PlayerHUDWidget;		//玩家HUD
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	FString GameCtrlLevelName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	FString PlayerLevelName;
 
 	virtual void BeginPlay() override;
 };

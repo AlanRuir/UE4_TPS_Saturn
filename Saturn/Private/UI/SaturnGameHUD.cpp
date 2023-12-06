@@ -35,23 +35,48 @@ void ASaturnGameHUD::BeginPlay()
     GameCtrlHUDWidget = CreateWidget<UUserWidget>(GetWorld(), GameCtrlHUDWidgetClass);
     PlayerHUDWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDWidgetClass);
 
-    if (GameCtrlHUDWidget && PlayerHUDWidget)
+    // 检查当前关卡，如果是level1，则显示PlayerHUDWidget
+    FString CurrentLevelName = GetWorld()->GetMapName();
+    CurrentLevelName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
+    if (CurrentLevelName.Equals(GameCtrlLevelName))
     {
-        GameCtrlHUDWidget->AddToViewport();     //添加到屏幕
-        GameCtrlHUDWidget->SetVisibility(ESlateVisibility::Visible);        //显示界面
-        PlayerHUDWidget->AddToViewport();       //添加到屏幕
-        PlayerHUDWidget->SetVisibility(ESlateVisibility::Hidden);        //隐藏界面
-
-        // 设置输入模式为UI模式，并显示鼠标
-        APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-        if (PlayerController)
+        if (GameCtrlHUDWidget)
         {
-            FInputModeUIOnly InputMode;     //UI模式
-            InputMode.SetWidgetToFocus(GameCtrlHUDWidget->TakeWidget());        //设置焦点
-            InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);        //不锁定鼠标
+            if (!GameCtrlHUDWidget->IsInViewport())         //判断用户界面是否已经添加到屏幕
+            {
+                GameCtrlHUDWidget->AddToViewport();     //添加到屏幕
+            }
+            GameCtrlHUDWidget->SetVisibility(ESlateVisibility::Visible);        //显示界面
+            // 设置输入模式为UI模式，并显示鼠标
+            APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+            if (PlayerController)
+            {
+                FInputModeUIOnly InputMode;     //UI模式
+                InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);        //不锁定鼠标
 
-            PlayerController->SetInputMode(InputMode);      //设置输入模式
-            PlayerController->bShowMouseCursor = true;      //显示鼠标
+                PlayerController->SetInputMode(InputMode);      //设置输入模式
+                PlayerController->bShowMouseCursor = true;      //显示鼠标
+            }
+        }
+    }
+    else if (CurrentLevelName.Equals(PlayerLevelName))
+    {
+        if (PlayerHUDWidget)
+        {
+            if (!PlayerHUDWidget->IsInViewport())
+            {
+                PlayerHUDWidget->AddToViewport();       //添加到屏幕
+            }
+            PlayerHUDWidget->SetVisibility(ESlateVisibility::Visible);        //显示界面
+
+            // 设置输入模式为游戏模式
+            APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+            if (PlayerController)
+            {
+                FInputModeGameOnly InputMode;
+                PlayerController->SetInputMode(InputMode);
+                PlayerController->bShowMouseCursor = false;
+            }
         }
     }
 }
@@ -70,11 +95,19 @@ void ASaturnGameHUD::ShowGameCtrlHUD()
 {
     if (PlayerHUDWidget)
     {
+        if (!PlayerHUDWidget->IsInViewport())
+        {
+            PlayerHUDWidget->AddToViewport();       //添加到屏幕
+        }
         PlayerHUDWidget->SetVisibility(ESlateVisibility::Hidden);
     }
 
     if (GameCtrlHUDWidget)
     {
+        if (!GameCtrlHUDWidget->IsInViewport())         //判断用户界面是否已经添加到屏幕
+        {
+            GameCtrlHUDWidget->AddToViewport();     //添加到屏幕
+        }
         GameCtrlHUDWidget->SetVisibility(ESlateVisibility::Visible);
 
         // 设置输入模式为UI模式，并显示鼠标
@@ -82,7 +115,6 @@ void ASaturnGameHUD::ShowGameCtrlHUD()
         if (PlayerController)
         {
             FInputModeUIOnly InputMode;     //UI模式
-            InputMode.SetWidgetToFocus(GameCtrlHUDWidget->TakeWidget());        //设置焦点
             InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);        //不锁定鼠标
 
             PlayerController->SetInputMode(InputMode);      //设置输入模式
@@ -106,4 +138,14 @@ void ASaturnGameHUD::ShowPlayerHUD()
 void ASaturnGameHUD::StartGame()
 {
     UE_LOG(LogTemp, Warning, TEXT("StartGame"));
+}
+
+FString ASaturnGameHUD::GetGameCtrlLevelName() const
+{
+    return GameCtrlLevelName;
+}
+
+FString ASaturnGameHUD::GetPlayerLevelName() const
+{
+    return PlayerLevelName;
 }

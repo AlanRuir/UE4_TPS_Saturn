@@ -14,6 +14,7 @@ class SATURN_API USaturnGameCtrlHUDWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
+private:
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	void StartGame();	//开始游戏
 	UFUNCTION(BlueprintCallable, Category = "UI")
